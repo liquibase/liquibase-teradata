@@ -20,4 +20,9 @@ public class BooleanType extends liquibase.datatype.core.BooleanType {
     public DatabaseDataType toDatabaseDataType(Database database) {
         return new DatabaseDataType("BYTEINT");
     }
+
+    @Override
+    protected boolean isNumericBoolean(Database database) {
+        return true;
+    }
 }
