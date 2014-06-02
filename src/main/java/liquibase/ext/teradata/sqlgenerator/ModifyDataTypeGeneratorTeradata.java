@@ -41,7 +41,7 @@ public class ModifyDataTypeGeneratorTeradata extends ModifyDataTypeGenerator {
 		// alterTable += getPreDataTypeString(database); // adds a space if nothing else
 
 		// add column type
-		alterTable += " "+ DataTypeFactory.getInstance().fromDescription(statement.getNewDataType()).toDatabaseDataType(database).toSql();
+		alterTable += " "+ DataTypeFactory.getInstance().fromDescription(statement.getNewDataType(), database).toDatabaseDataType(database).toSql();
 
 		return new Sql[]{new UnparsedSql(alterTable)};
 	}

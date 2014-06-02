@@ -49,7 +49,7 @@ public class AddColumnGeneratorTeradata extends liquibase.sqlgenerator.core.AddC
 		String alterTable = "ALTER TABLE " + database.escapeTableName(statement.getCatalogName(), statement.getSchemaName(), statement.getTableName()) +
                 " ADD " +
                 database.escapeColumnName(statement.getCatalogName(), statement.getSchemaName(), statement.getTableName(), statement.getColumnName())
-                + " " + DataTypeFactory.getInstance().fromDescription(statement.getColumnType() + (statement.isAutoIncrement() ? "{autoIncrement:true}" : "")).toDatabaseDataType(database);
+                + " " + DataTypeFactory.getInstance().fromDescription(statement.getColumnType() + (statement.isAutoIncrement() ? "{autoIncrement:true}" : ""), database).toDatabaseDataType(database);
 
 		if (statement.isAutoIncrement() && database.supportsAutoIncrement()) {
 			alterTable += " " + database.getAutoIncrementClause(null, null);
@@ -65,7 +65,7 @@ public class AddColumnGeneratorTeradata extends liquibase.sqlgenerator.core.AddC
 
 		if (statement.getDefaultValue()!=null){
 			alterTable += " DEFAULT ";
-			LiquibaseDataType defaultValueType = DataTypeFactory.getInstance().fromDescription(statement.getColumnType() + (statement.isAutoIncrement() ? "{autoIncrement:true}" : ""));
+			LiquibaseDataType defaultValueType = DataTypeFactory.getInstance().fromDescription(statement.getColumnType() + (statement.isAutoIncrement() ? "{autoIncrement:true}" : ""), database);
 			alterTable +=(defaultValueType instanceof DateTimeType ?" TIMESTAMP ":(defaultValueType instanceof DateType ?" DATE ":(defaultValueType instanceof TimeType ?" TIME ":"")));
 			alterTable += DataTypeFactory.getInstance().fromObject(statement.getDefaultValue(), database).objectToSql(statement.getDefaultValue(), database);
 		}
