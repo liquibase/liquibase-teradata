@@ -18,6 +18,7 @@ package liquibase.ext.teradata.sqlgenerator;
 import java.util.Arrays;
 import java.util.Iterator;
 
+import liquibase.change.AddColumnConfig;
 import liquibase.database.Database;
 import liquibase.ext.teradata.database.TeradataDatabase;
 import liquibase.sql.Sql;
@@ -26,6 +27,7 @@ import liquibase.sqlgenerator.SqlGeneratorChain;
 import liquibase.sqlgenerator.core.CreateIndexGenerator;
 import liquibase.statement.core.AddColumnStatement;
 import liquibase.statement.core.CreateIndexStatement;
+import liquibase.structure.core.Column;
 import liquibase.structure.core.Index;
 
 /**
@@ -64,10 +66,10 @@ public class CreateIndexGeneratorTeradata extends CreateIndexGenerator {
 		}
 
 		buffer.append("(");
-		Iterator<String> iterator = Arrays.asList(statement.getColumns()).iterator();
+		Iterator<AddColumnConfig> iterator = Arrays.asList(statement.getColumns()).iterator();
 		while (iterator.hasNext()) {
-			String column = iterator.next();
-			buffer.append(database.escapeColumnName(statement.getTableCatalogName(), statement.getTableSchemaName(), statement.getTableName(), column));
+			AddColumnConfig column = iterator.next();
+			buffer.append(database.escapeColumnName(statement.getTableCatalogName(), statement.getTableSchemaName(), statement.getTableName(), column.getName()));
 			if (iterator.hasNext()) {
 				buffer.append(", ");
 			}

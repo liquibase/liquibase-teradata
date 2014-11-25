@@ -3,6 +3,7 @@
  */
 package liquibase.ext.teradata.sqlgenerator;
 
+import liquibase.change.ColumnConfig;
 import liquibase.database.Database;
 import liquibase.database.core.SybaseASADatabase;
 import liquibase.database.core.SybaseDatabase;
@@ -78,7 +79,7 @@ public class AddColumnGeneratorTeradata extends liquibase.sqlgenerator.core.AddC
 		}
 
 		if (statement.isUnique()) {
-			returnSql.addAll(Arrays.asList(SqlGeneratorFactory.getInstance().generateSql(new AddUniqueConstraintStatement(statement.getCatalogName(), statement.getSchemaName(), statement.getTableName(), statement.getColumnName(), null) , database)));
+			returnSql.addAll(Arrays.asList(SqlGeneratorFactory.getInstance().generateSql(new AddUniqueConstraintStatement(statement.getCatalogName(), statement.getSchemaName(), statement.getTableName(), new ColumnConfig[] { new ColumnConfig().setName(statement.getColumnName())}, null) , database)));
 		}
 		//	if (statement.getDefaultValue()!=null)
 		//		returnSql.addAll(Arrays.asList(SqlGeneratorFactory.getInstance().generateSql(new AddDefaultValueStatement(statement.getSchemaName(), statement.getTableName(), statement.getColumnName(), statement.getColumnType(), statement.getDefaultValue()) , database)));
