@@ -66,7 +66,7 @@ public class CreateTableGeneratorTeradata extends CreateTableGenerator {
             }
 
 			buffer.append(database.escapeColumnName(statement.getCatalogName(), statement.getSchemaName(), statement.getTableName(), column));
-			buffer.append(" ").append(statement.getColumnTypes().get(column));
+			buffer.append(" ").append(statement.getColumnTypes().get(column).toDatabaseDataType(database));
 
 			if (statement.getDefaultValue(column) != null) {
 				Object defaultValue = statement.getDefaultValue(column);
