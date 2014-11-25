@@ -107,7 +107,7 @@ public class TeradataDatabase extends AbstractJdbcDatabase {
 
 	@Override
 	public String getDefaultSchemaName() {
-		return null;
+		return getDatabaseName();
 	}
 
 	/**
