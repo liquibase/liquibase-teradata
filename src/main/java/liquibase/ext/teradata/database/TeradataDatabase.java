@@ -22,6 +22,7 @@ import java.text.SimpleDateFormat;
 
 import liquibase.database.AbstractJdbcDatabase;
 import liquibase.database.DatabaseConnection;
+import liquibase.database.OfflineConnection;
 import liquibase.exception.DatabaseException;
 import liquibase.exception.UnexpectedLiquibaseException;
 import liquibase.executor.ExecutorService;
@@ -36,7 +37,7 @@ public class TeradataDatabase extends AbstractJdbcDatabase {
 	private String databaseName=null;
 
 	protected String getDatabaseName(){
-		if (null==databaseName){
+		if (null==databaseName && getConnection() != null && (!(getConnection() instanceof OfflineConnection))) {
 			try {
 				databaseName = (String) ExecutorService.getInstance().getExecutor(this).queryForObject(new RawSqlStatement("SELECT DATABASE"), String.class);
 			} catch (DatabaseException e) {
@@ -101,16 +102,12 @@ public class TeradataDatabase extends AbstractJdbcDatabase {
 
 	@Override
 	public String getDefaultCatalogName() {
-        try {
-            return getConnection().getCatalog();
-        } catch (DatabaseException e) {
-            throw new UnexpectedLiquibaseException(e);
-        }
+		return getDatabaseName();
     }
 
 	@Override
 	public String getDefaultSchemaName() {
-		return getDatabaseName();
+		return null;
 	}
 
 	/**
