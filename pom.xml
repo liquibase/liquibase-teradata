@@ -25,7 +25,7 @@
     </issueManagement>
 
     <scm>
-		<connection>scm:git:http://github.com/liquibase/liquibase-teradata.git</connection>
+		<connection>scm:git:git@github.com:liquibase/liquibase-teradata.git</connection>
 		<url>https://github.com/liquibase/liquibase-teradata</url>
     </scm>
 
