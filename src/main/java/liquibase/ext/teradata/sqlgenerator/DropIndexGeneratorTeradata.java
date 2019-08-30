@@ -15,6 +15,8 @@
  */
 package liquibase.ext.teradata.sqlgenerator;
 
+import java.util.List;
+
 import liquibase.database.Database;
 import liquibase.database.core.MSSQLDatabase;
 import liquibase.database.core.OracleDatabase;
@@ -26,8 +28,6 @@ import liquibase.sqlgenerator.core.DropIndexGenerator;
 import liquibase.statement.core.DropIndexStatement;
 import liquibase.structure.core.Index;
 import liquibase.util.StringUtils;
-
-import java.util.List;
 
 /**
  * drop index specific syntax

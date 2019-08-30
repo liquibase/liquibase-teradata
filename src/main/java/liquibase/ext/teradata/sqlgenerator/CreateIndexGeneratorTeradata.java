@@ -25,9 +25,7 @@ import liquibase.sql.Sql;
 import liquibase.sql.UnparsedSql;
 import liquibase.sqlgenerator.SqlGeneratorChain;
 import liquibase.sqlgenerator.core.CreateIndexGenerator;
-import liquibase.statement.core.AddColumnStatement;
 import liquibase.statement.core.CreateIndexStatement;
-import liquibase.structure.core.Column;
 import liquibase.structure.core.Index;
 
 /**

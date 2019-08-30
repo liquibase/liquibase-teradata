@@ -21,7 +21,6 @@ import liquibase.sql.Sql;
 import liquibase.sql.UnparsedSql;
 import liquibase.sqlgenerator.SqlGeneratorChain;
 import liquibase.sqlgenerator.core.RenameTableGenerator;
-import liquibase.statement.core.AddColumnStatement;
 import liquibase.statement.core.RenameTableStatement;
 import liquibase.structure.core.Table;
 

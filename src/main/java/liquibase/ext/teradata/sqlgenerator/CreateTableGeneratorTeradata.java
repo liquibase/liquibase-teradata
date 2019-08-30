@@ -3,6 +3,8 @@
  */
 package liquibase.ext.teradata.sqlgenerator;
 
+import java.util.Iterator;
+
 import liquibase.database.Database;
 import liquibase.datatype.DataTypeFactory;
 import liquibase.datatype.LiquibaseDataType;
@@ -20,8 +22,6 @@ import liquibase.statement.ForeignKeyConstraint;
 import liquibase.statement.UniqueConstraint;
 import liquibase.statement.core.CreateTableStatement;
 import liquibase.util.StringUtils;
-
-import java.util.Iterator;
 
 /**
  * To handle Teradata specific syntax for default values

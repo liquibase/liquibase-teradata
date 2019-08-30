@@ -9,7 +9,6 @@ import liquibase.sql.Sql;
 import liquibase.sql.UnparsedSql;
 import liquibase.sqlgenerator.SqlGeneratorChain;
 import liquibase.sqlgenerator.core.DropPrimaryKeyGenerator;
-import liquibase.statement.core.AddColumnStatement;
 import liquibase.statement.core.DropPrimaryKeyStatement;
 import liquibase.structure.core.PrimaryKey;
 
