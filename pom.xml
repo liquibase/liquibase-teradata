@@ -6,7 +6,7 @@
 	<groupId>org.liquibase.ext</groupId>
 	<artifactId>liquibase-teradata</artifactId>
 	<name>Liquibase Teradata extension</name>
-	<version>3.2.1-SNAPSHOT</version>
+	<version>3.3.0-SNAPSHOT</version>
 	<description>Adds support for Teradata Database to Liquibase</description>
 	<url>http://www.liquibase.org</url>
 
@@ -59,7 +59,7 @@
 		<dependency>
 			<groupId>org.liquibase</groupId>
 			<artifactId>liquibase-core</artifactId>
-			<version>3.3.1</version>
+			<version>3.8.0</version>
 		</dependency>
 
 		<dependency>
@@ -82,7 +82,6 @@
 						<target>${java.version}</target>
 						<optimize>true</optimize>
 						<debug>true</debug>
-						<encoding>${project.build.sourceEncoding}</encoding>
 					</configuration>
 				</plugin>
 
@@ -185,11 +184,6 @@
 						<configuration>
 							<!-- By default fail the build if the analysis is not succeed -->
 							<failOnWarning>${maven.dependency.plugin.failOnWarning}</failOnWarning>
-							<ignoredUnusedDeclaredDependencies>
-								<!-- sentry-logback will be ignored by default during dependency 
-									check -->
-								<ignoredUnusedDeclaredDependency>io.sentry:sentry-logback</ignoredUnusedDeclaredDependency>
-							</ignoredUnusedDeclaredDependencies>
 						</configuration>
 					</execution>
 				</executions>

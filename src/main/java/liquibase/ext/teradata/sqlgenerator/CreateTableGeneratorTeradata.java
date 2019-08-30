@@ -80,16 +80,16 @@ public class CreateTableGeneratorTeradata extends CreateTableGenerator {
 				buffer.append(defaultValueType.objectToSql(defaultValue, database));
 			}
 
-			if (isAutoIncrement && (database.getAutoIncrementClause(null, null) != null) && (!database.getAutoIncrementClause(null, null).equals(""))) {
+			if (isAutoIncrement && (database.getAutoIncrementClause(null, null, null, true) != null) && (!database.getAutoIncrementClause(null, null, null, true).equals(""))) {
 				if (database.supportsAutoIncrement()) {
-					buffer.append(" ").append(database.getAutoIncrementClause(null, null)).append(" ");
+					buffer.append(" ").append(database.getAutoIncrementClause(null, null, null, true)).append(" ");
 				} else {
 					LogFactory.getLogger().warning(database.getShortName() + " does not support autoincrement columns as request for "
 							+ (database.escapeTableName(statement.getCatalogName(), statement.getSchemaName(), statement.getTableName())));
 				}
 			}
 
-			if (statement.getNotNullColumns().contains(column)) {
+			if (statement.getNotNullColumns().containsKey(column)) {
 				buffer.append(" NOT NULL");
 			}
 

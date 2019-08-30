@@ -52,7 +52,7 @@ public class AddColumnGeneratorTeradata extends liquibase.sqlgenerator.core.AddC
                 + " " + DataTypeFactory.getInstance().fromDescription(statement.getColumnType() + (statement.isAutoIncrement() ? "{autoIncrement:true}" : ""), database).toDatabaseDataType(database);
 
 		if (statement.isAutoIncrement() && database.supportsAutoIncrement()) {
-			alterTable += " " + database.getAutoIncrementClause(null, null);
+			alterTable += " " + database.getAutoIncrementClause(null, null, null, true);
 		}
 
 		if (!statement.isNullable()) {
