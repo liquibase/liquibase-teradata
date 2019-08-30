@@ -33,17 +33,17 @@ import liquibase.statement.core.RawSqlStatement;
  */
 public class TeradataDatabase extends AbstractJdbcDatabase {
 
-	private String databaseName=null;
+	private String databaseName = null;
 
-	protected String getDatabaseName(){
-		if (null==databaseName && getConnection() != null && (!(getConnection() instanceof OfflineConnection))) {
+	protected String getDatabaseName() {
+		if (null == this.databaseName && this.getConnection() != null && (!(this.getConnection() instanceof OfflineConnection))) {
 			try {
-				databaseName = (String) ExecutorService.getInstance().getExecutor(this).queryForObject(new RawSqlStatement("SELECT DATABASE"), String.class);
+				this.databaseName = ExecutorService.getInstance().getExecutor(this).queryForObject(new RawSqlStatement("SELECT DATABASE"), String.class);
 			} catch (DatabaseException e) {
 				e.printStackTrace();
 			}
 		}
-		return databaseName;
+		return this.databaseName;
 	}
 
 	@Override
@@ -53,28 +53,29 @@ public class TeradataDatabase extends AbstractJdbcDatabase {
 
 	@Override
 	public String getDefaultDriver(String url) {
-		if (url.startsWith("jdbc:teradata:"))
+		if (url.startsWith("jdbc:teradata:")) {
 			return "com.teradata.jdbc.TeraDriver";
-		else
+		} else {
 			return null;
+		}
 	}
 
-    @Override
-    public String getShortName() {
-        return "teradata";
-    }
+	@Override
+	public String getShortName() {
+		return "teradata";
+	}
 
-    @Override
-    protected String getDefaultDatabaseProductName() {
-        return "Teradata";
-    }
+	@Override
+	protected String getDefaultDatabaseProductName() {
+		return "Teradata";
+	}
 
-    @Override
-    public Integer getDefaultPort() {
-        return 1025;
-    }
+	@Override
+	public Integer getDefaultPort() {
+		return 1025;
+	}
 
-    @Override
+	@Override
 	public boolean supportsInitiallyDeferrableColumns() {
 		return true;
 	}
@@ -101,12 +102,12 @@ public class TeradataDatabase extends AbstractJdbcDatabase {
 
 	@Override
 	public String getDefaultCatalogName() {
-		return getDatabaseName();
-    }
+		return this.getDatabaseName();
+	}
 
 	@Override
 	public String getDefaultSchemaName() {
-		return getDatabaseName();
+		return this.getDatabaseName();
 	}
 
 	/**
@@ -122,7 +123,7 @@ public class TeradataDatabase extends AbstractJdbcDatabase {
 	 */
 	@Override
 	public boolean isReservedWord(String string) {
-		boolean reserved =false;
+		boolean reserved = false;
 		reserved = reserved || "VALUE".equalsIgnoreCase(string);
 		reserved = reserved || "PASSWORD".equalsIgnoreCase(string);
 		reserved = reserved || "TITLE".equalsIgnoreCase(string);
@@ -139,7 +140,7 @@ public class TeradataDatabase extends AbstractJdbcDatabase {
 	 */
 	@Override
 	public String getDateTimeLiteral(Timestamp date) {
-		return "'"+new SimpleDateFormat("yyyy-MM-dd hh:mm:ss.SSS").format(date)+"'";
+		return "'" + new SimpleDateFormat("yyyy-MM-dd hh:mm:ss.SSS").format(date) + "'";
 	}
 
 	/**
@@ -147,7 +148,7 @@ public class TeradataDatabase extends AbstractJdbcDatabase {
 	 */
 	@Override
 	public String getDateLiteral(Date date) {
-		return "'"+new SimpleDateFormat("yyyy-MM-dd").format(date)+"'";
+		return "'" + new SimpleDateFormat("yyyy-MM-dd").format(date) + "'";
 	}
 
 	/**
@@ -155,10 +156,7 @@ public class TeradataDatabase extends AbstractJdbcDatabase {
 	 */
 	@Override
 	public String getTimeLiteral(Time date) {
-		return "'"+new SimpleDateFormat("hh:mm:ss.SSS").format(date)+"'";
+		return "'" + new SimpleDateFormat("hh:mm:ss.SSS").format(date) + "'";
 	}
-
-
-
 
 }

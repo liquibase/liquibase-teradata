@@ -29,23 +29,28 @@ import liquibase.statement.core.CreateViewStatement;
  */
 public class CreateViewGeneratorTeradata extends CreateViewGenerator {
 
-    @Override
-    public int getPriority() {
-        return PRIORITY_DATABASE;
-    }
+	@Override
+	public int getPriority() {
+		return PRIORITY_DATABASE;
+	}
 
-    public boolean supports(CreateViewStatement statement, Database database) {
-        return database instanceof TeradataDatabase;
-    }
-	/* (non-Javadoc)
-	 * @see liquibase.sqlgenerator.core.CreateViewGenerator#generateSql(liquibase.statement.core.CreateViewStatement, liquibase.database.Database, liquibase.sqlgenerator.SqlGeneratorChain)
+	@Override
+	public boolean supports(CreateViewStatement statement, Database database) {
+		return database instanceof TeradataDatabase;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see liquibase.sqlgenerator.core.CreateViewGenerator#generateSql(liquibase.statement.core.CreateViewStatement, liquibase.database.Database,
+	 * liquibase.sqlgenerator.SqlGeneratorChain)
 	 */
 	@Override
 	public Sql[] generateSql(CreateViewStatement statement, Database database, SqlGeneratorChain sqlGeneratorChain) {
 		String createClause = (statement.isReplaceIfExists() ? "REPLACE " : "CREATE ") + "VIEW";
 
-		return new Sql[]{
-				new UnparsedSql(createClause + " " + database.escapeViewName(statement.getCatalogName(), statement.getSchemaName(), statement.getViewName()) + " AS " + statement.getSelectQuery())
-		};
+		return new Sql[] {
+				new UnparsedSql(createClause + " " + database.escapeViewName(statement.getCatalogName(), statement.getSchemaName(), statement.getViewName())
+						+ " AS " + statement.getSelectQuery()) };
 	}
 }

@@ -29,41 +29,43 @@ import liquibase.util.StringUtils;
  */
 public class CreateTableGeneratorTeradata extends CreateTableGenerator {
 
-    @Override
-    public int getPriority() {
-        return PRIORITY_DATABASE;
-    }
+	@Override
+	public int getPriority() {
+		return PRIORITY_DATABASE;
+	}
 
-    @Override
-    public boolean supports(CreateTableStatement statement, Database database) {
-        return database instanceof TeradataDatabase;
-    }
+	@Override
+	public boolean supports(CreateTableStatement statement, Database database) {
+		return database instanceof TeradataDatabase;
+	}
 
-    /**
+	/**
 	 * Modified to handle Teradata syntax for default values
-	 * @see liquibase.sqlgenerator.core.CreateTableGenerator#generateSql(liquibase.statement.core.CreateTableStatement, liquibase.database.Database, liquibase.sqlgenerator.SqlGeneratorChain)
+	 * 
+	 * @see liquibase.sqlgenerator.core.CreateTableGenerator#generateSql(liquibase.statement.core.CreateTableStatement, liquibase.database.Database,
+	 *      liquibase.sqlgenerator.SqlGeneratorChain)
 	 */
 	@Override
 	public Sql[] generateSql(CreateTableStatement statement, Database database, SqlGeneratorChain sqlGeneratorChain) {
-		StringBuffer buffer = new StringBuffer();
-		buffer.append("CREATE TABLE ").append(database.escapeTableName(statement.getCatalogName(), statement.getSchemaName(), statement.getTableName())).append(" ");
+		StringBuilder buffer = new StringBuilder();
+		buffer.append("CREATE TABLE ").append(database.escapeTableName(statement.getCatalogName(), statement.getSchemaName(), statement.getTableName()))
+				.append(" ");
 		buffer.append("(");
 		Iterator<String> columnIterator = statement.getColumns().iterator();
 
-        boolean isSinglePrimaryKeyColumn = statement.getPrimaryKeyConstraint() != null
-                && statement.getPrimaryKeyConstraint().getColumns().size() == 1;
+		boolean isSinglePrimaryKeyColumn = statement.getPrimaryKeyConstraint() != null && statement.getPrimaryKeyConstraint().getColumns().size() == 1;
 
-        boolean isPrimaryKeyAutoIncrement = false;
+		boolean isPrimaryKeyAutoIncrement = false;
 
-        while (columnIterator.hasNext()) {
+		while (columnIterator.hasNext()) {
 			String column = columnIterator.next();
 			boolean isAutoIncrement = false;
-            for (AutoIncrementConstraint constraint : statement.getAutoIncrementConstraints()) {
-                if (constraint.getColumnName().equalsIgnoreCase(column)) {
-                    isAutoIncrement = true;
-                    break;
-                }
-            }
+			for (AutoIncrementConstraint constraint : statement.getAutoIncrementConstraints()) {
+				if (constraint.getColumnName().equalsIgnoreCase(column)) {
+					isAutoIncrement = true;
+					break;
+				}
+			}
 
 			buffer.append(database.escapeColumnName(statement.getCatalogName(), statement.getSchemaName(), statement.getTableName(), column));
 			buffer.append(" ").append(statement.getColumnTypes().get(column).toDatabaseDataType(database));
@@ -72,18 +74,18 @@ public class CreateTableGeneratorTeradata extends CreateTableGenerator {
 				Object defaultValue = statement.getDefaultValue(column);
 				buffer.append(" DEFAULT ");
 				LiquibaseDataType defaultValueType = DataTypeFactory.getInstance().fromObject(defaultValue, database);
-				buffer.append((defaultValueType instanceof DateTimeType ?" TIMESTAMP ":(defaultValueType instanceof DateType ?" DATE ":(defaultValueType instanceof TimeType ?" TIME ":""))));
+				buffer.append((defaultValueType instanceof DateTimeType ? " TIMESTAMP "
+						: (defaultValueType instanceof DateType ? " DATE " : (defaultValueType instanceof TimeType ? " TIME " : ""))));
 
 				buffer.append(defaultValueType.objectToSql(defaultValue, database));
 			}
 
-			if (isAutoIncrement &&
-					(database.getAutoIncrementClause(null, null)!=null) &&
-					(!database.getAutoIncrementClause(null, null).equals(""))) {
+			if (isAutoIncrement && (database.getAutoIncrementClause(null, null) != null) && (!database.getAutoIncrementClause(null, null).equals(""))) {
 				if (database.supportsAutoIncrement()) {
 					buffer.append(" ").append(database.getAutoIncrementClause(null, null)).append(" ");
 				} else {
-					LogFactory.getLogger().warning(database.getShortName()+" does not support autoincrement columns as request for "+(database.escapeTableName(statement.getCatalogName(), statement.getSchemaName(), statement.getTableName())));
+					LogFactory.getLogger().warning(database.getShortName() + " does not support autoincrement columns as request for "
+							+ (database.escapeTableName(statement.getCatalogName(), statement.getSchemaName(), statement.getTableName())));
 				}
 			}
 
@@ -98,38 +100,37 @@ public class CreateTableGeneratorTeradata extends CreateTableGenerator {
 
 		buffer.append(",");
 
-        if (!(isSinglePrimaryKeyColumn && isPrimaryKeyAutoIncrement)) {
+		if (!(isSinglePrimaryKeyColumn && isPrimaryKeyAutoIncrement)) {
 
-            if (statement.getPrimaryKeyConstraint() != null && statement.getPrimaryKeyConstraint().getColumns().size() > 0) {
-                if (database.supportsPrimaryKeyNames()) {
-                    String pkName = StringUtils.trimToNull(statement.getPrimaryKeyConstraint().getConstraintName());
-                    if (pkName == null) {
-                        pkName = database.generatePrimaryKeyName(statement.getTableName());
-                    }
-                    if (pkName != null) {
-                        buffer.append(" CONSTRAINT ");
-                        buffer.append(database.escapeConstraintName(pkName));
-                    }
-                }
-                buffer.append(" PRIMARY KEY (");
-                buffer.append(database.escapeColumnNameList(StringUtils.join(statement.getPrimaryKeyConstraint().getColumns(), ", ")));
-                buffer.append(")");
+			if (statement.getPrimaryKeyConstraint() != null && !statement.getPrimaryKeyConstraint().getColumns().isEmpty()) {
+				if (database.supportsPrimaryKeyNames()) {
+					String pkName = StringUtils.trimToNull(statement.getPrimaryKeyConstraint().getConstraintName());
+					if (pkName == null) {
+						pkName = database.generatePrimaryKeyName(statement.getTableName());
+					}
+					if (pkName != null) {
+						buffer.append(" CONSTRAINT ");
+						buffer.append(database.escapeConstraintName(pkName));
+					}
+				}
+				buffer.append(" PRIMARY KEY (");
+				buffer.append(database.escapeColumnNameList(StringUtils.join(statement.getPrimaryKeyConstraint().getColumns(), ", ")));
+				buffer.append(")");
 
-                buffer.append(",");
-            }
-        }
+				buffer.append(",");
+			}
+		}
 
 		for (ForeignKeyConstraint fkConstraint : statement.getForeignKeyConstraints()) {
-            buffer.append(" CONSTRAINT ");
-            buffer.append(database.escapeConstraintName(fkConstraint.getForeignKeyName()));
+			buffer.append(" CONSTRAINT ");
+			buffer.append(database.escapeConstraintName(fkConstraint.getForeignKeyName()));
 			String referencesString = fkConstraint.getReferences();
 			if (!referencesString.contains(".") && database.getDefaultSchemaName() != null) {
-				referencesString = database.getDefaultSchemaName()+"."+referencesString;
+				referencesString = database.getDefaultSchemaName() + "." + referencesString;
 			}
-			buffer.append(" FOREIGN KEY (")
-			.append(database.escapeColumnName(statement.getCatalogName(), statement.getSchemaName(), statement.getTableName(), fkConstraint.getColumn()))
-			.append(") REFERENCES ")
-			.append(referencesString);
+			buffer.append(" FOREIGN KEY (").append(
+					database.escapeColumnName(statement.getCatalogName(), statement.getSchemaName(), statement.getTableName(), fkConstraint.getColumn()))
+					.append(") REFERENCES ").append(referencesString);
 
 			if (fkConstraint.isDeleteCascade()) {
 				buffer.append(" ON DELETE CASCADE");
@@ -157,8 +158,6 @@ public class CreateTableGeneratorTeradata extends CreateTableGenerator {
 
 		String sql = buffer.toString().replaceFirst(",\\s*$", "") + ")";
 
-		return new Sql[] {
-				new UnparsedSql(sql)
-		};
+		return new Sql[] { new UnparsedSql(sql) };
 	}
 }
