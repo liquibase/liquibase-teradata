@@ -53,7 +53,7 @@ public class TeradataDatabase extends AbstractJdbcDatabase {
 
 	@Override
 	public String getDefaultDriver(String url) {
-		if (url.startsWith("jdbc:teradata:")) {
+		if (url != null && url.startsWith("jdbc:teradata:")) {
 			return "com.teradata.jdbc.TeraDriver";
 		} else {
 			return null;
@@ -119,20 +119,16 @@ public class TeradataDatabase extends AbstractJdbcDatabase {
 	}
 
 	/**
-	 * Most frequent reserved keywords (full list in "Fundamentals" manual)
+	 * Most frequent reserved keywords (full list in "Fundamentals" manual)<br>
+	 *     Now full list coded in {@link TeradataReservedWord}
 	 */
 	@Override
 	public boolean isReservedWord(String string) {
-		boolean reserved = false;
-		reserved = reserved || "VALUE".equalsIgnoreCase(string);
-		reserved = reserved || "PASSWORD".equalsIgnoreCase(string);
-		reserved = reserved || "TITLE".equalsIgnoreCase(string);
-		reserved = reserved || "ENABLED".equalsIgnoreCase(string);
-		reserved = reserved || "RANK".equalsIgnoreCase(string);
-		reserved = reserved || "POSITION".equalsIgnoreCase(string);
-		reserved = reserved || "YEAR".equalsIgnoreCase(string);
-		reserved = reserved || "ACCOUNT".equalsIgnoreCase(string);
-		return reserved;
+		for (int number = 0 ; number <TeradataReservedWord.values().length; number++) {
+			if (string.equalsIgnoreCase(TeradataReservedWord.values()[number].name()))
+				return true;
+		}
+		return false;
 	}
 
 	/**
