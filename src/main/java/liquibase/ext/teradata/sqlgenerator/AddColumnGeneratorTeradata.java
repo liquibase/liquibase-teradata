@@ -3,12 +3,15 @@
  */
 package liquibase.ext.teradata.sqlgenerator;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import liquibase.change.ColumnConfig;
 import liquibase.database.Database;
 import liquibase.database.core.SybaseASADatabase;
 import liquibase.database.core.SybaseDatabase;
 import liquibase.datatype.DataTypeFactory;
-import liquibase.datatype.DatabaseDataType;
 import liquibase.datatype.LiquibaseDataType;
 import liquibase.datatype.core.DateTimeType;
 import liquibase.datatype.core.DateType;
@@ -24,10 +27,6 @@ import liquibase.statement.core.AddUniqueConstraintStatement;
 import liquibase.structure.core.Column;
 import liquibase.structure.core.Schema;
 import liquibase.structure.core.Table;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 /**
  * Teradata requires that "No other table options can be specified when a constraint is specified in the statement"
@@ -53,7 +52,7 @@ public class AddColumnGeneratorTeradata extends liquibase.sqlgenerator.core.AddC
                 + " " + DataTypeFactory.getInstance().fromDescription(statement.getColumnType() + (statement.isAutoIncrement() ? "{autoIncrement:true}" : ""), database).toDatabaseDataType(database);
 
 		if (statement.isAutoIncrement() && database.supportsAutoIncrement()) {
-			alterTable += " " + database.getAutoIncrementClause(null, null);
+			alterTable += " " + database.getAutoIncrementClause(null, null, null, true);
 		}
 
 		if (!statement.isNullable()) {

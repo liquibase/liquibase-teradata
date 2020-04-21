@@ -21,7 +21,6 @@ import liquibase.sql.Sql;
 import liquibase.sql.UnparsedSql;
 import liquibase.sqlgenerator.SqlGeneratorChain;
 import liquibase.sqlgenerator.core.GetViewDefinitionGenerator;
-import liquibase.statement.core.AddColumnStatement;
 import liquibase.statement.core.GetViewDefinitionStatement;
 
 /**

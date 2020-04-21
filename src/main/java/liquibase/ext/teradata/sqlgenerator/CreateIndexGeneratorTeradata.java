@@ -25,9 +25,7 @@ import liquibase.sql.Sql;
 import liquibase.sql.UnparsedSql;
 import liquibase.sqlgenerator.SqlGeneratorChain;
 import liquibase.sqlgenerator.core.CreateIndexGenerator;
-import liquibase.statement.core.AddColumnStatement;
 import liquibase.statement.core.CreateIndexStatement;
-import liquibase.structure.core.Column;
 import liquibase.structure.core.Index;
 
 /**
@@ -36,23 +34,23 @@ import liquibase.structure.core.Index;
  */
 public class CreateIndexGeneratorTeradata extends CreateIndexGenerator {
 
-    @Override
-    public int getPriority() {
-        return PRIORITY_DATABASE;
-    }
+	@Override
+	public int getPriority() {
+		return PRIORITY_DATABASE;
+	}
 
-    @Override
-    public boolean supports(CreateIndexStatement statement, Database database) {
-        return database instanceof TeradataDatabase;
-    }
+	@Override
+	public boolean supports(CreateIndexStatement statement, Database database) {
+		return database instanceof TeradataDatabase;
+	}
 
-
-    /**
-	 * @see liquibase.sqlgenerator.core.CreateIndexGenerator#generateSql(liquibase.statement.core.CreateIndexStatement, liquibase.database.Database, liquibase.sqlgenerator.SqlGeneratorChain)
+	/**
+	 * @see liquibase.sqlgenerator.core.CreateIndexGenerator#generateSql(liquibase.statement.core.CreateIndexStatement, liquibase.database.Database,
+	 *      liquibase.sqlgenerator.SqlGeneratorChain)
 	 */
 	@Override
 	public Sql[] generateSql(CreateIndexStatement statement, Database database, SqlGeneratorChain sqlGeneratorChain) {
-		StringBuffer buffer = new StringBuffer();
+		StringBuilder buffer = new StringBuilder();
 
 		buffer.append("CREATE ");
 		if (statement.isUnique() != null && statement.isUnique().booleanValue()) {
@@ -61,7 +59,7 @@ public class CreateIndexGeneratorTeradata extends CreateIndexGenerator {
 		buffer.append("INDEX ");
 
 		if (statement.getIndexName() != null) {
-			//String indexSchema = statement.getTableSchemaName();
+			// String indexSchema = statement.getTableSchemaName();
 			buffer.append(database.escapeObjectName(statement.getIndexName(), Index.class)).append(" ");
 		}
 
@@ -69,7 +67,8 @@ public class CreateIndexGeneratorTeradata extends CreateIndexGenerator {
 		Iterator<AddColumnConfig> iterator = Arrays.asList(statement.getColumns()).iterator();
 		while (iterator.hasNext()) {
 			AddColumnConfig column = iterator.next();
-			buffer.append(database.escapeColumnName(statement.getTableCatalogName(), statement.getTableSchemaName(), statement.getTableName(), column.getName()));
+			buffer.append(
+					database.escapeColumnName(statement.getTableCatalogName(), statement.getTableSchemaName(), statement.getTableName(), column.getName()));
 			if (iterator.hasNext()) {
 				buffer.append(", ");
 			}
@@ -79,6 +78,6 @@ public class CreateIndexGeneratorTeradata extends CreateIndexGenerator {
 		buffer.append("ON ");
 		buffer.append(database.escapeTableName(statement.getTableCatalogName(), statement.getTableSchemaName(), statement.getTableName()));
 
-		return new Sql[]{new UnparsedSql(buffer.toString())};
+		return new Sql[] { new UnparsedSql(buffer.toString()) };
 	}
 }

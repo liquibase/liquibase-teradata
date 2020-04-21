@@ -25,7 +25,6 @@ import liquibase.change.core.AddLookupTableChange;
 import liquibase.change.core.AddPrimaryKeyChange;
 import liquibase.database.Database;
 import liquibase.ext.teradata.database.TeradataDatabase;
-import liquibase.servicelocator.PrioritizedService;
 import liquibase.statement.SqlStatement;
 import liquibase.statement.core.RawSqlStatement;
 
