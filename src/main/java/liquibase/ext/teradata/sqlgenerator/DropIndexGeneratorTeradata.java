@@ -27,7 +27,7 @@ import liquibase.sqlgenerator.SqlGeneratorChain;
 import liquibase.sqlgenerator.core.DropIndexGenerator;
 import liquibase.statement.core.DropIndexStatement;
 import liquibase.structure.core.Index;
-import liquibase.util.StringUtils;
+import liquibase.util.StringUtil;
 
 /**
  * drop index specific syntax
@@ -50,7 +50,7 @@ public class DropIndexGeneratorTeradata extends DropIndexGenerator {
 	 */
 	@Override
 	public Sql[] generateSql(DropIndexStatement statement, Database database, SqlGeneratorChain sqlGeneratorChain) {
-		List<String> associatedWith = StringUtils.splitAndTrim(statement.getAssociatedWith(), ",");
+		List<String> associatedWith = StringUtil.splitAndTrim(statement.getAssociatedWith(), ",");
 		if (associatedWith != null) {
 			if (associatedWith.contains(Index.MARK_PRIMARY_KEY)|| associatedWith.contains(Index.MARK_UNIQUE_CONSTRAINT)) {
 				return new Sql[0];
