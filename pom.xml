@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.liquibase.ext</groupId>
 	<artifactId>liquibase-teradata</artifactId>
-	<version>3.3.0-SNAPSHOT</version>
+	<version>3.9.0</version>
 
 	<name>Liquibase MS SQL Server Extensions</name>
 	<description>Liquibase extensions for MS SQL Server.</description>
@@ -28,7 +28,7 @@
 	<scm>
 		<connection>scm:git:http://github.com/liquibase/liquibase-teradata.git</connection>
 		<url>https://github.com/liquibase/liquibase-teradata</url>
-		<tag>HEAD</tag>
+		<tag>liquibase-teradata-3.9.0</tag>
 	</scm>
 
 	<developers>
