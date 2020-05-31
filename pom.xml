@@ -5,8 +5,8 @@
 	<artifactId>liquibase-teradata</artifactId>
 	<version>3.9.1-SNAPSHOT</version>
 
-	<name>Liquibase MS SQL Server Extensions</name>
-	<description>Liquibase extensions for MS SQL Server.</description>
+	<name>Liquibase Teradata Extensions</name>
+	<description>Liquibase extensions for Teradata.</description>
 	<url>https://github.com/liquibase/liquibase-teradata</url>
 
 	<organization>
