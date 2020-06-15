@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.liquibase.ext</groupId>
 	<artifactId>liquibase-teradata</artifactId>
-	<version>3.10.0</version>
+	<version>3.10.1-SNAPSHOT</version>
 
 	<name>Liquibase Teradata Extensions</name>
 	<description>Liquibase extensions for Teradata.</description>
@@ -28,7 +28,7 @@
 	<scm>
 		<connection>scm:git:http://github.com/liquibase/liquibase-teradata.git</connection>
 		<url>https://github.com/liquibase/liquibase-teradata</url>
-		<tag>liquibase-teradata-3.10.0</tag>
+		<tag>HEAD</tag>
 	</scm>
 
 	<developers>
