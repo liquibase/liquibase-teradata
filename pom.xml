@@ -1,14 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.liquibase.ext</groupId>
 	<artifactId>liquibase-teradata</artifactId>
-	<name>Liquibase Teradata extension</name>
-	<version>3.3.0-SNAPSHOT</version>
-	<description>Adds support for Teradata Database to Liquibase</description>
-	<url>http://www.liquibase.org</url>
+	<version>4.0.0-beta2-SNAPSHOT</version>
+
+	<name>Liquibase Teradata Extensions</name>
+	<description>Liquibase extensions for Teradata.</description>
+	<url>https://github.com/liquibase/liquibase-teradata</url>
 
 	<organization>
 		<name>Liquibase.org</name>
@@ -27,18 +26,10 @@
 	</issueManagement>
 
 	<scm>
-		<connection>scm:git:git@github.com:liquibase/liquibase-teradata.git</connection>
+		<connection>scm:git:http://github.com/liquibase/liquibase-teradata.git</connection>
 		<url>https://github.com/liquibase/liquibase-teradata</url>
+		<tag>HEAD</tag>
 	</scm>
-
-	<prerequisites>
-		<maven>3.0.5</maven>
-	</prerequisites>
-
-	<properties>
-		<java.version>1.6</java.version>
-		<maven.dependency.plugin.failOnWarning>true</maven.dependency.plugin.failOnWarning>
-	</properties>
 
 	<developers>
 		<developer>
@@ -59,7 +50,7 @@
 		<dependency>
 			<groupId>org.liquibase</groupId>
 			<artifactId>liquibase-core</artifactId>
-			<version>4.0.0-beta1</version>
+			<version>4.0.0-beta2</version>
 		</dependency>
 
 		<dependency>
@@ -82,14 +73,52 @@
 		<pluginManagement>
 			<plugins>
 				<plugin>
-					<artifactId>maven-compiler-plugin</artifactId>
-					<version>3.8.1</version>
+					<artifactId>maven-resources-plugin</artifactId>
 					<configuration>
-						<source>${java.version}</source>
-						<target>${java.version}</target>
+						<encoding>UTF-8</encoding>
+					</configuration>
+				</plugin>
+				<plugin>
+					<artifactId>maven-compiler-plugin</artifactId>
+					<configuration>
+						<source>1.8</source>
+						<target>1.8</target>
 						<optimize>true</optimize>
 						<debug>true</debug>
+						<encoding>${project.build.sourceEncoding}</encoding>
 					</configuration>
+				</plugin>
+				<plugin>
+					<artifactId>maven-surefire-plugin</artifactId>
+					<configuration>
+						<redirectTestOutputToFile>true</redirectTestOutputToFile>
+						<reportFormat>plain</reportFormat>
+					</configuration>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-enforcer-plugin</artifactId>
+					<executions>
+						<execution>
+							<id>enforce-java</id>
+							<phase>compile</phase>
+							<goals>
+								<goal>enforce</goal>
+							</goals>
+							<configuration>
+								<rules>
+									<requireJavaVersion>
+										<version>1.8</version>
+									</requireJavaVersion>
+								</rules>
+							</configuration>
+						</execution>
+					</executions>
+				</plugin>
+				<plugin>
+					<groupId>org.codehaus.mojo</groupId>
+					<artifactId>build-helper-maven-plugin</artifactId>
+					<version>3.2.0</version>
 				</plugin>
 
 				<plugin>
@@ -99,6 +128,15 @@
 					<configuration>
 						<stagingRepository>/tmp/maven-snapshot</stagingRepository>
 						<mavenExecutorId>forked-path</mavenExecutorId>
+                        <pushChanges>false</pushChanges>
+					</configuration>
+				</plugin>
+
+
+				<plugin>
+					<artifactId>maven-deploy-plugin</artifactId>
+					<configuration>
+						<skip>false</skip>
 					</configuration>
 				</plugin>
 
@@ -121,98 +159,46 @@
 						<nexusUrl>https://oss.sonatype.org/service/local/staging/deploy/maven2/</nexusUrl>
 					</configuration>
 				</plugin>
-
 				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-enforcer-plugin</artifactId>
-					<executions>
-						<execution>
-							<id>enforce-java</id>
-							<phase>compile</phase>
-							<goals>
-								<goal>enforce</goal>
-							</goals>
-							<configuration>
-								<rules>
-									<requireJavaVersion>
-										<version>${java.version}</version>
-									</requireJavaVersion>
-								</rules>
-							</configuration>
-						</execution>
+    					<groupId>org.apache.maven.plugins</groupId>
+    					<artifactId>maven-javadoc-plugin</artifactId>
+					<configuration>
+						<author>false</author>
+        					<doctitle>Liquibase CDI ${project.version} API</doctitle>
+        					<quiet>true</quiet>
+        					<doclint>none</doclint>
+        					<encoding>UTF-8</encoding>
+        					<jarOutputDirectory>${project.basedir}/target</jarOutputDirectory>
+    					</configuration>
+    					<executions>
+        					<execution>
+            						<id>jar-javadoc</id>
+            						<goals>
+                						<goal>jar</goal>
+            						</goals>
+            						<phase>package</phase>
+        					</execution>
+    					</executions>
+				</plugin>				
 
-						<execution>
-							<id>enforce-maven</id>
-							<goals>
-								<goal>enforce</goal>
-							</goals>
-							<configuration>
-								<rules>
-									<requireMavenVersion>
-										<version>3.0.5</version>
-									</requireMavenVersion>
-								</rules>
-							</configuration>
-						</execution>
 
-						<execution>
-							<id>enforce-bytecode-version</id>
-							<goals>
-								<goal>enforce</goal>
-							</goals>
-							<configuration>
-								<rules>
-									<enforceBytecodeVersion>
-										<maxJdkVersion>${java.version}</maxJdkVersion>
-									</enforceBytecodeVersion>
-								</rules>
-								<fail>true</fail>
-							</configuration>
-						</execution>
-					</executions>
-				</plugin>
 			</plugins>
 		</pluginManagement>
-
-		<plugins>
-			<plugin>
-				<!-- Analyzes the dependencies in the verify phase (by default) of every 
-					child by default to check if a transitive dependency is used but undeclared 
-					and is unused but declared. Every child project could skip this check for 
-					the corresponding dependencies by using <ignoredUsedUndeclaredDependencies> 
-					and <ignoredUnusedDeclaredDependencies> -->
-				<artifactId>maven-dependency-plugin</artifactId>
-				<executions>
-					<execution>
-						<id>analyze</id>
-						<goals>
-							<goal>analyze-only</goal>
-						</goals>
-						<configuration>
-							<!-- By default fail the build if the analysis is not succeed -->
-							<failOnWarning>${maven.dependency.plugin.failOnWarning}</failOnWarning>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
-		</plugins>
-
-
 	</build>
 
+  <distributionManagement>
+        <repository>
+            <id>sonatype-nexus-staging</id>
+            <name>Nexus Release Repository</name>
+            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2</url>
 
-	<distributionManagement>
-		<repository>
-			<id>sonatype-nexus-staging</id>
-			<name>Nexus Release Repository</name>
-			<url>https://oss.sonatype.org/service/local/staging/deploy/maven2</url>
-		</repository>
-		<snapshotRepository>
-			<id>sonatype-nexus-snapshots</id>
-			<name>Sonatype Nexus Snapshots</name>
-			<url>https://oss.sonatype.org/content/repositories/snapshots</url>
-		</snapshotRepository>
-	</distributionManagement>
+        </repository>
+        <snapshotRepository>
+            <id>sonatype-nexus-snapshots</id>
+            <name>Sonatype Nexus Snapshots</name>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+        </snapshotRepository>
+    </distributionManagement>
 
 	<profiles>
 		<profile>
@@ -228,6 +214,17 @@
 					<plugin>
 						<groupId>org.apache.maven.plugins</groupId>
 						<artifactId>maven-gpg-plugin</artifactId>
+    						<version>1.6</version>
+                				<configuration>
+                    					<passphrase>${env.GPG_PASSPHRASE}</passphrase>
+                    					<gpgArguments>
+                        					<!-- This is necessary for gpg to not try to use the pinentry programs -->
+                        					<arg>--batch</arg>
+                        					<arg>--no-tty</arg>
+                        					<arg>--pinentry-mode</arg>
+                        					<arg>loopback</arg>
+                    					</gpgArguments>
+                				</configuration>						
 						<executions>
 							<execution>
 								<id>sign-artifacts</id>
