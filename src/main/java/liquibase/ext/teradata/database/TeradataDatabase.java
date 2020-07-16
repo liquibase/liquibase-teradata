@@ -20,6 +20,7 @@ import java.sql.Time;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 
+import liquibase.Scope;
 import liquibase.database.AbstractJdbcDatabase;
 import liquibase.database.DatabaseConnection;
 import liquibase.database.OfflineConnection;
@@ -38,7 +39,7 @@ public class TeradataDatabase extends AbstractJdbcDatabase {
 	protected String getDatabaseName() {
 		if (null == this.databaseName && this.getConnection() != null && (!(this.getConnection() instanceof OfflineConnection))) {
 			try {
-				this.databaseName = ExecutorService.getInstance().getExecutor(this).queryForObject(new RawSqlStatement("SELECT DATABASE"), String.class);
+				this.databaseName = Scope.getCurrentScope().getSingleton(ExecutorService.class).getExecutor("jdbc", this).queryForObject(new RawSqlStatement("SELECT DATABASE"), String.class);
 			} catch (DatabaseException e) {
 				e.printStackTrace();
 			}

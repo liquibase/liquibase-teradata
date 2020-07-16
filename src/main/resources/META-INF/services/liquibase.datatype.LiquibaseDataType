@@ -1,0 +1,3 @@
+liquibase.ext.teradata.datatype.BooleanType
+liquibase.ext.teradata.datatype.DateTimeType
+liquibase.ext.teradata.datatype.DoubleType

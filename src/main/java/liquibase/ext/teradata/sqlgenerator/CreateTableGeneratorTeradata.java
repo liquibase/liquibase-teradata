@@ -5,6 +5,7 @@ package liquibase.ext.teradata.sqlgenerator;
 
 import java.util.Iterator;
 
+import liquibase.Scope;
 import liquibase.database.Database;
 import liquibase.datatype.DataTypeFactory;
 import liquibase.datatype.LiquibaseDataType;
@@ -21,7 +22,7 @@ import liquibase.statement.AutoIncrementConstraint;
 import liquibase.statement.ForeignKeyConstraint;
 import liquibase.statement.UniqueConstraint;
 import liquibase.statement.core.CreateTableStatement;
-import liquibase.util.StringUtils;
+import liquibase.util.StringUtil;
 
 /**
  * To handle Teradata specific syntax for default values
@@ -84,7 +85,7 @@ public class CreateTableGeneratorTeradata extends CreateTableGenerator {
 				if (database.supportsAutoIncrement()) {
 					buffer.append(" ").append(database.getAutoIncrementClause(null, null, null, true)).append(" ");
 				} else {
-					LogFactory.getLogger().warning(database.getShortName() + " does not support autoincrement columns as request for "
+					Scope.getCurrentScope().getLog(getClass()).warning(database.getShortName() + " does not support autoincrement columns as request for "
 							+ (database.escapeTableName(statement.getCatalogName(), statement.getSchemaName(), statement.getTableName())));
 				}
 			}
@@ -104,7 +105,7 @@ public class CreateTableGeneratorTeradata extends CreateTableGenerator {
 
 			if (statement.getPrimaryKeyConstraint() != null && !statement.getPrimaryKeyConstraint().getColumns().isEmpty()) {
 				if (database.supportsPrimaryKeyNames()) {
-					String pkName = StringUtils.trimToNull(statement.getPrimaryKeyConstraint().getConstraintName());
+					String pkName = StringUtil.trimToNull(statement.getPrimaryKeyConstraint().getConstraintName());
 					if (pkName == null) {
 						pkName = database.generatePrimaryKeyName(statement.getTableName());
 					}
@@ -114,7 +115,7 @@ public class CreateTableGeneratorTeradata extends CreateTableGenerator {
 					}
 				}
 				buffer.append(" PRIMARY KEY (");
-				buffer.append(database.escapeColumnNameList(StringUtils.join(statement.getPrimaryKeyConstraint().getColumns(), ", ")));
+				buffer.append(database.escapeColumnNameList(StringUtil.join(statement.getPrimaryKeyConstraint().getColumns(), ", ")));
 				buffer.append(")");
 
 				buffer.append(",");
@@ -151,7 +152,7 @@ public class CreateTableGeneratorTeradata extends CreateTableGenerator {
 				buffer.append(database.escapeConstraintName(uniqueConstraint.getConstraintName()));
 			}
 			buffer.append(" UNIQUE (");
-			buffer.append(database.escapeColumnNameList(StringUtils.join(uniqueConstraint.getColumns(), ", ")));
+			buffer.append(database.escapeColumnNameList(StringUtil.join(uniqueConstraint.getColumns(), ", ")));
 			buffer.append(")");
 			buffer.append(",");
 		}
