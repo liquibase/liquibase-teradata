@@ -1,4 +1,4 @@
-# Liquibase Teradata Extension
+# Liquibase Teradata Extension [![Build and Test Extension](https://github.com/liquibase/liquibase-teradata/actions/workflows/build.yml/badge.svg)](https://github.com/liquibase/liquibase-teradata/actions/workflows/build.yml)
 
 This extension lets you use Liquibase with a Teradata database
 
