@@ -1,7 +1,7 @@
 package liquibase.ext.teradata.change;
 
+import liquibase.database.core.MockDatabase;
 import liquibase.ext.teradata.database.TeradataDatabase;
-import liquibase.sdk.database.MockDatabase;
 import org.hamcrest.core.Is;
 import org.junit.Assert;
 import org.junit.Test;
