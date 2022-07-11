@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.liquibase.ext</groupId>
 	<artifactId>liquibase-teradata</artifactId>
-	<version>4.12.1-SNAPSHOT</version>
+	<version>4.13.0</version>
 
 	<name>Liquibase Teradata Extensions</name>
 	<description>Liquibase extensions for Teradata.</description>
@@ -50,7 +50,7 @@
 		<dependency>
 			<groupId>org.liquibase</groupId>
 			<artifactId>liquibase-core</artifactId>
-			<version>4.12.0</version>
+			<version>4.13.0</version>
 		</dependency>
 
 		<dependency>
