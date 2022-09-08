@@ -99,7 +99,7 @@ jobs:
             **/target/jacoco.exec
 
 #  integration-test:
-#    name: Test Harness for Redshift ${{ matrix.teradata }}
+#    name: Test Harness for Teradata ${{ matrix.teradata }}
 #    needs: build
 #    runs-on: ubuntu-latest
 #
