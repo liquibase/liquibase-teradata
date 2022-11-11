@@ -1,0 +1,10 @@
+inputFormat: xml
+context: testContext
+
+databasesUnderTest:
+  - name: teradata
+    version: 5
+    prefix: docker
+    url: jdbc:teradata://127.0.0.1/DATABASE=lbcat
+    username: dbc
+    password: dbc
