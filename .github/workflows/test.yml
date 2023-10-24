@@ -51,3 +51,4 @@ jobs:
           path: |
             **/target/surefire-reports
             **/target/jacoco.exec
+            
