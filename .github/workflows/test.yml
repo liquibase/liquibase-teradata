@@ -13,42 +13,41 @@ jobs:
     uses: liquibase/build-logic/.github/workflows/os-extension-test.yml@v0.5.3
     secrets: inherit
 
-#  integration-test:
-#    name: Test Harness for Teradata ${{ matrix.teradata }}
-#    needs: build
-#    runs-on: ubuntu-latest
-#
-#    strategy:
-#      fail-fast: false
-#      matrix:
-#        teradata: [ "" ]
-#
-#    steps:
-#      - uses: actions/checkout@v2
-#
-#      - name: Set up JDK
-#        uses: actions/setup-java@v2
-#        with:
-#          java-version: 17
-#          distribution: 'temurin'
-#          cache: 'maven'
-#
-#      - name: Build Cache
-#        uses: actions/cache@v3.0.5
-#        with:
-#          key: build-${{ github.run_number }}-${{ github.run_attempt }}
-#          path: |
-#            **/target/**
-#            ~/.m2/repository/org/liquibase/
-#
-#      - name: Run Tests
-#        run: mvn -B jacoco:prepare-agent surefire:test -Dteradata.version=${{ matrix.teradata }}
-#
-#      - name: Archive Test Results
-#        if: ${{ always() }}
-#        uses: actions/upload-artifact@v2
-#        with:
-#          name: test-reports-teradata-${{ matrix.teradata }}
-#          path: |
-#            **/target/surefire-reports
-#            **/target/jacoco.exec
+  integration-test:
+    name: Test Harness for Teradata ${{ matrix.teradata }}
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        teradata: [ "" ]
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Set up JDK
+        uses: actions/setup-java@v2
+        with:
+          java-version: 17
+          distribution: 'temurin'
+          cache: 'maven'
+
+      - name: Build Cache
+        uses: actions/cache@v3.0.5
+        with:
+          key: build-${{ github.run_number }}-${{ github.run_attempt }}
+          path: |
+            **/target/**
+            ~/.m2/repository/org/liquibase/
+
+      - name: Run Tests
+        run: mvn -B jacoco:prepare-agent surefire:test -Dteradata.version=${{ matrix.teradata }}
+
+      - name: Archive Test Results
+        if: ${{ always() }}
+        uses: actions/upload-artifact@v2
+        with:
+          name: test-reports-teradata-${{ matrix.teradata }}
+          path: |
+            **/target/surefire-reports
+            **/target/jacoco.exec
