@@ -3,80 +3,25 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
+    <parent>
+        <groupId>org.liquibase</groupId>
+        <artifactId>liquibase-parent-pom</artifactId>
+        <version>0.2.6</version> <!-- Replace with the desired version -->
+    </parent>
+
     <groupId>org.liquibase.ext</groupId>
     <artifactId>liquibase-teradata</artifactId>
-    <version>0-SNAPSHOT</version>
+    <version>4.24.1-SNAPSHOT</version>
 
-    <name>Liquibase Extension: Teradata Database support</name>
+    <name>Liquibase Extension Teradata Database support</name>
     <description>Add this Liquibase extension to your project to support Teradata Database</description>
     <url>https://github.com/liquibase/liquibase-teradata</url>
 
-    <organization>
-        <name>Liquibase</name>
-        <url>http://www.liquibase.com</url>
-    </organization>
-
-    <licenses>
-        <license>
-            <url>http://www.apache.org/licenses/LICENSE-2.0</url>
-            <name>Apache License, Version 2.0</name>
-        </license>
-    </licenses>
-
-    <issueManagement>
-        <url>https://github.com/liquibase/liquibase-teradata/issues</url>
-    </issueManagement>
-
-    <scm>
-        <connection>scm:git:http://github.com/liquibase/liquibase-teradata.git</connection>
-        <url>https://github.com/liquibase/liquibase-teradata</url>
-        <tag>HEAD</tag>
-    </scm>
-
-    <developers>
-        <developer>
-            <id>liquibase</id>
-            <name>Liquibase Community</name>
-            <email>community@liquibase.com</email>
-            <roles>
-                <role>architect</role>
-                <role>developer</role>
-            </roles>
-            <timezone>-6</timezone>
-        </developer>
-        <developer>
-            <id>nvoxland</id>
-            <name>Nathan Voxland</name>
-            <email>nathan.voxland@liquibase.org</email>
-            <roles>
-                <role>architect</role>
-                <role>developer</role>
-            </roles>
-            <timezone>-6</timezone>
-        </developer>
-    </developers>
     <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <liquibase.version>0-SNAPSHOT</liquibase.version>
-        <liquibase.sdk.github.token>${env.GITHUB_TOKEN}</liquibase.sdk.github.token>
-
-        <sonar.organization>liquibase</sonar.organization>
-        <sonar.projectKey>${project.artifactId}</sonar.projectKey>
-        <sonar.projectName>${project.name}</sonar.projectName>
-        <sonar.projectDescription>${project.description}</sonar.projectDescription>
-        <sonar.host.url>https://sonarcloud.io</sonar.host.url>
-        <sonar.scm.provider>git</sonar.scm.provider>
-        <sonar.qualitygate.wait>true</sonar.qualitygate.wait>
-
-        <jacoco.fileset.directory>target</jacoco.fileset.directory>
+        <liquibase.version>4.24.0</liquibase.version>
     </properties>
 
     <dependencies>
-        <dependency>
-            <groupId>org.liquibase</groupId>
-            <artifactId>liquibase-core</artifactId>
-            <version>${liquibase.version}</version>
-        </dependency>
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
@@ -94,103 +39,43 @@
     <build>
         <plugins>
             <plugin>
-                <artifactId>maven-resources-plugin</artifactId>
-                <version>3.3.1</version>
-                <configuration>
-                    <encoding>UTF-8</encoding>
-                </configuration>
-            </plugin>
-            <plugin>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.11.0</version>
-                <configuration>
-                    <release>8</release>
-                    <optimize>true</optimize>
-                    <debug>true</debug>
-                    <encoding>${project.build.sourceEncoding}</encoding>
-                </configuration>
-            </plugin>
-            <plugin>
                 <artifactId>maven-surefire-plugin</artifactId>
-                <version>3.2.1</version>
+                <version>${maven-surefire-plugin.version}</version>
                 <configuration>
                     <redirectTestOutputToFile>true</redirectTestOutputToFile>
                     <reportFormat>plain</reportFormat>
+                    <systemPropertyVariables>
+                        <com.athaydes.spockframework.report.outputDir>${project.build.directory}/spock-reports</com.athaydes.spockframework.report.outputDir>
+                    </systemPropertyVariables>
                 </configuration>
+                <dependencies>
+                    <!-- Force using the latest JUnit 47 provider -->
+                    <dependency>
+                      <groupId>org.apache.maven.surefire</groupId>
+                      <artifactId>surefire-junit47</artifactId>
+                      <version>${maven-surefire-plugin.version}</version>
+                    </dependency>
+                  </dependencies>
             </plugin>
             <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>build-helper-maven-plugin</artifactId>
-                <version>3.4.0</version>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-javadoc-plugin</artifactId>
-                <version>3.6.0</version>
+                <artifactId>maven-failsafe-plugin</artifactId>
+                <version>${maven-failsafe-plugin.version}</version>
                 <configuration>
-                    <attach>true</attach>
-                    <author>false</author>
-                    <doctitle>Liquibase Teradata ${version} API</doctitle>
-                    <quiet>true</quiet>
-                    <doclint>none</doclint>
-                    <encoding>UTF-8</encoding>
-
-                    <includeDependencySources>false</includeDependencySources>
+                    <redirectTestOutputToFile>true</redirectTestOutputToFile>
+                    <reportFormat>plain</reportFormat>
+                    <systemPropertyVariables>
+                        <com.athaydes.spockframework.report.outputDir>${project.build.directory}/spock-reports</com.athaydes.spockframework.report.outputDir>
+                    </systemPropertyVariables>
                 </configuration>
-                <executions>
-                    <execution>
-                        <id>javadoc-default</id>
-                        <goals>
-                            <goal>jar</goal>
-                        </goals>
-                        <phase>package</phase>
-                    </execution>
-                </executions>
-            </plugin>
-
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-source-plugin</artifactId>
-                <version>3.3.0</version>
-                <executions>
-                    <execution>
-                        <id>attach-sources</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>jar</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-
-            <plugin>
-                <groupId>org.jacoco</groupId>
-                <artifactId>jacoco-maven-plugin</artifactId>
-                <version>0.8.11</version>
-                <configuration>
-                    <fileSets>
-                        <fileSet>
-                            <directory>${jacoco.fileset.directory}</directory>
-                            <includes>
-                                <include>**/jacoco.exec</include>
-                            </includes>
-                        </fileSet>
-                    </fileSets>
-                </configuration>
-            </plugin>
-
-            <plugin>
-                <groupId>org.sonarsource.scanner.maven</groupId>
-                <artifactId>sonar-maven-plugin</artifactId>
-                <version>3.10.0.2594</version>
-            </plugin>
-
-            <plugin>
-                <groupId>org.liquibase.ext</groupId>
-                <artifactId>liquibase-sdk-maven-plugin</artifactId>
-                <version>0.10.20</version>
+                <dependencies>
+                    <!-- Force using the latest JUnit 47 provider -->
+                    <dependency>
+                      <groupId>org.apache.maven.surefire</groupId>
+                      <artifactId>surefire-junit47</artifactId>
+                      <version>${maven-surefire-plugin.version}</version>
+                    </dependency>
+                  </dependencies>
             </plugin>
         </plugins>
-
     </build>
 </project>
