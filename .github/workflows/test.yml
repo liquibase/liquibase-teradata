@@ -52,7 +52,7 @@ jobs:
             **/target/surefire-reports
             **/target/jacoco.exec
 
-      dependabot-automerge:
-        needs: build-test
-        uses: liquibase/build-logic/.github/workflows/dependabot-automerge.yml@v0.5.7
-        secrets: inherit
+  dependabot-automerge:
+    needs: build
+    uses: liquibase/build-logic/.github/workflows/dependabot-automerge.yml@v0.5.7
+    secrets: inherit
