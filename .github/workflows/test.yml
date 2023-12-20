@@ -9,8 +9,8 @@ on:
       - synchronize
 
 jobs:
-  build:
-    uses: liquibase/build-logic/.github/workflows/os-extension-test.yml@v0.5.3
+  build-test:
+    uses: liquibase/build-logic/.github/workflows/os-extension-test.yml@v0.5.9
     secrets: inherit
 
   integration-test:
@@ -33,7 +33,7 @@ jobs:
           cache: 'maven'
 
       - name: Build Cache
-        uses: actions/cache@v3.0.5
+        uses: actions/cache@v3.3.2
         with:
           key: build-${{ github.run_number }}-${{ github.run_attempt }}
           path: |
@@ -45,10 +45,14 @@ jobs:
 
       - name: Archive Test Results
         if: ${{ always() }}
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: test-reports-teradata-${{ matrix.teradata }}
           path: |
             **/target/surefire-reports
             **/target/jacoco.exec
-            
+
+  dependabot-automerge:
+    needs: build-test
+    uses: liquibase/build-logic/.github/workflows/dependabot-automerge.yml@v0.5.9
+    secrets: inherit
