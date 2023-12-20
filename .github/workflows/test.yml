@@ -10,7 +10,7 @@ on:
 
 jobs:
   build-test:
-    uses: liquibase/build-logic/.github/workflows/os-extension-test.yml@v0.5.7
+    uses: liquibase/build-logic/.github/workflows/os-extension-test.yml@v0.5.9
     secrets: inherit
 
   integration-test:
@@ -45,7 +45,7 @@ jobs:
 
       - name: Archive Test Results
         if: ${{ always() }}
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: test-reports-teradata-${{ matrix.teradata }}
           path: |
@@ -54,5 +54,5 @@ jobs:
 
   dependabot-automerge:
     needs: build-test
-    uses: liquibase/build-logic/.github/workflows/dependabot-automerge.yml@v0.5.7
+    uses: liquibase/build-logic/.github/workflows/dependabot-automerge.yml@v0.5.9
     secrets: inherit
