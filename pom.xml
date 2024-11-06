@@ -10,7 +10,7 @@
 
     <groupId>org.liquibase.ext</groupId>
     <artifactId>liquibase-teradata</artifactId>
-    <version>4.30.0</version>
+    <version>4.31.0-SNAPSHOT</version>
 
     <name>Liquibase Extension Teradata Database support</name>
     <description>Add this Liquibase extension to your project to support Teradata Database</description>
@@ -39,7 +39,7 @@
         <connection>scm:git:${project.scm.url}</connection>
         <developerConnection>scm:git:${project.scm.url}</developerConnection>
 		<url>https://github.com/liquibase/liquibase-teradata.git</url>
-		<tag>temp</tag>
+		<tag>HEAD</tag>
 	</scm>
 
     <build>
