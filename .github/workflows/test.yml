@@ -21,46 +21,6 @@ jobs:
     uses: liquibase/build-logic/.github/workflows/os-extension-test.yml@main
     secrets: inherit
 
-  integration-test:
-    needs: authorize
-    name: Test Harness for Teradata ${{ matrix.teradata }}
-    runs-on: ubuntu-latest
-
-    strategy:
-      fail-fast: false
-      matrix:
-        teradata: [ "" ]
-
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Set up JDK
-        uses: actions/setup-java@v4
-        with:
-          java-version: 17
-          distribution: 'temurin'
-          cache: 'maven'
-
-      - name: Build Cache
-        uses: actions/cache@v4.2.0
-        with:
-          key: build-${{ github.run_number }}-${{ github.run_attempt }}
-          path: |
-            **/target/**
-            ~/.m2/repository/org/liquibase/
-
-      - name: Run Tests
-        run: mvn -B jacoco:prepare-agent surefire:test -Dteradata.version=${{ matrix.teradata }}
-
-      - name: Archive Test Results
-        if: ${{ always() }}
-        uses: actions/upload-artifact@v4
-        with:
-          name: test-reports-teradata-${{ matrix.teradata }}
-          path: |
-            **/target/surefire-reports
-            **/target/jacoco.exec
-
   dependabot-automerge:
     needs: build-test
     uses: liquibase/build-logic/.github/workflows/dependabot-automerge.yml@main
